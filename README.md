@@ -31,18 +31,28 @@ Mobile client: React Native / Expo, using the plain WebSocket API through a smal
 ```bash
 # 1. Start the server
 cd server
-python -m venv venv && source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# 2. In two more terminals, simulate two users
-cd test_client
-python test_client.py alice
-python test_client.py bob
-# in alice's terminal: bob hey!
 ```
 
-To try it from Expo instead of the terminal client, check `mobile-example/`. Copy `useWebSocket.ts` and `ChatTestScreen.tsx` into an Expo app and point `SERVER_URL` at your machine's local network IP.
+Leave that running. In two more terminals, simulate two users:
+
+```bash
+cd test_client
+source ../server/venv/bin/activate
+pip install websockets
+python test_client.py alice
+```
+
+```bash
+cd test_client
+source ../server/venv/bin/activate
+python test_client.py bob
+```
+
+Then in alice's terminal: `bob hey there!`, it should show up instantly in bob's terminal.
 
 ## Things I chose to leave out on purpose
 
