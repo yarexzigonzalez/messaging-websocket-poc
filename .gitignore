@@ -3,3 +3,4 @@ venv/
 __pycache__/
 *.pyc
 node_modules/
+deaddrop-app/node_modules/

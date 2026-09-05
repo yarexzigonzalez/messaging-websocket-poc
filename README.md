@@ -31,18 +31,42 @@ Mobile client: React Native / Expo, using the plain WebSocket API through a smal
 ```bash
 # 1. Start the server
 cd server
-python -m venv venv && source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# 2. In two more terminals, simulate two users
-cd test_client
-python test_client.py alice
-python test_client.py bob
-# in alice's terminal: bob hey!
 ```
 
-To try it from Expo instead of the terminal client, check `mobile-example/`. Copy `useWebSocket.ts` and `ChatTestScreen.tsx` into an Expo app and point `SERVER_URL` at your machine's local network IP.
+Leave that running. In two more terminals, simulate two users:
+
+```bash
+cd test_client
+source ../server/venv/bin/activate
+pip install websockets
+python test_client.py alice
+```
+
+```bash
+cd test_client
+source ../server/venv/bin/activate
+python test_client.py bob
+```
+
+Then in alice's terminal: `bob hey there!`, it should show up instantly in bob's terminal.
+
+## Running it on Expo
+
+```bash
+cd deaddrop-app
+npx expo install react-dom react-native-web   # only needed once
+npx expo start
+```
+
+Scan the QR code with Expo Go on your phone, or press `w` in the terminal to open it in a browser. Either way, you'll land on an identity screen first, type any id (e.g. `alice`) and tap ENTER.
+
+To test the relay with two clients, run it on your phone (as `alice`) and press `w` for a second client in the browser (as `bob`), or any two combinations of device + browser tab. Send a message from one to the other, it should show up instantly on the other side.
+
+Note: `SERVER_URL` in `App.tsx` is currently hardcoded to a specific local IP address, update it to match your own machine's IP (`ipconfig getifaddr en0` on Mac) before running.
 
 ## Things I chose to leave out on purpose
 
@@ -58,3 +82,4 @@ There's no authentication on the connection yet. Right now any client can connec
 - Rate limit messages per connection
 - Store messages so offline users get them later
 - Look into a shared registry for scaling past one server
+- Echo sent messages back to the sender, so their own chat log shows what they said (right now, only the recipient sees the message, the sender's screen doesn't confirm it went out, which fits Deaddrop's "no trace" vibe, but a real chat app would need this)
