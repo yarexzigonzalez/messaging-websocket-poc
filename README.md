@@ -55,7 +55,6 @@ python test_client.py bob
 Then in alice's terminal: `bob hey there!`, it should show up instantly in bob's terminal.
 
 ## Running it on Expo
-![Deaddrop chat demo](screenshots/chat-demo.jpg)
 
 ```bash
 cd deaddrop-app
